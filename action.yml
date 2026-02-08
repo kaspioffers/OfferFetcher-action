@@ -1,0 +1,59 @@
+name: 'OfferFetcher Action'
+description: 'Fetch offers from Kaspi marketplace using OfferFetcher API'
+author: 'kaspioffers'
+
+branding:
+  icon: 'shopping-cart'
+  color: 'blue'
+
+inputs:
+  database-connection-string:
+    description: 'PostgreSQL database connection string for OfferFetcher'
+    required: true
+  timescaledb-connection-string:
+    description: 'TimescaleDB connection string for time-series data'
+    required: false
+    default: ''
+  batch-size:
+    description: 'Number of offers to fetch per batch'
+    required: false
+    default: '100'
+  scan-interval-minutes:
+    description: 'Minutes between scan intervals'
+    required: false
+    default: '15'
+  api-timeout:
+    description: 'Maximum runtime in seconds before timing out'
+    required: false
+    default: '300'
+  proxy-url:
+    description: 'Optional proxy server URL'
+    required: false
+    default: ''
+  proxy-username:
+    description: 'Optional proxy username'
+    required: false
+    default: ''
+  proxy-password:
+    description: 'Optional proxy password'
+    required: false
+    default: ''
+
+outputs:
+  status:
+    description: 'Status of the fetch operation (success/failure)'
+  message:
+    description: 'Detailed message about the operation result'
+
+runs:
+  using: 'docker'
+  image: 'docker://ghcr.io/kaspioffers/offerfetcher:latest'
+  args:
+    - ${{ inputs.database-connection-string }}
+    - ${{ inputs.timescaledb-connection-string }}
+    - ${{ inputs.batch-size }}
+    - ${{ inputs.scan-interval-minutes }}
+    - ${{ inputs.api-timeout }}
+    - ${{ inputs.proxy-url }}
+    - ${{ inputs.proxy-username }}
+    - ${{ inputs.proxy-password }}
