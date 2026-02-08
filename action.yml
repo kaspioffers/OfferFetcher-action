@@ -47,7 +47,7 @@ outputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/kaspioffers/offerfetcher:latest'
+  image: 'docker://ghcr.io/kaspioffers/offerfetcher/api-service:latest'
   args:
     - ${{ inputs.database-connection-string }}
     - ${{ inputs.timescaledb-connection-string }}
