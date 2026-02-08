@@ -1,5 +1,5 @@
 name: 'OfferFetcher Action'
-description: 'Fetch offers from Kaspi marketplace using OfferFetcher API (with PAT authentication)'
+description: 'Fetch offers'
 author: 'kaspioffers'
 
 branding:
