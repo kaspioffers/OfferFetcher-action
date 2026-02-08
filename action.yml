@@ -1,5 +1,5 @@
 name: 'OfferFetcher Action'
-description: 'Fetch offers from Kaspi marketplace using OfferFetcher API'
+description: 'Fetch offers from Kaspi marketplace using OfferFetcher API (with PAT authentication)'
 author: 'kaspioffers'
 
 branding:
@@ -7,6 +7,9 @@ branding:
   color: 'blue'
 
 inputs:
+  ghcr-token:
+    description: 'GitHub Personal Access Token with read:packages permission'
+    required: true
   database-connection-string:
     description: 'PostgreSQL database connection string for OfferFetcher'
     required: true
@@ -42,18 +45,40 @@ inputs:
 outputs:
   status:
     description: 'Status of the fetch operation (success/failure)'
+    value: ${{ steps.run-action.outputs.status }}
   message:
     description: 'Detailed message about the operation result'
+    value: ${{ steps.run-action.outputs.message }}
 
 runs:
-  using: 'docker'
-  image: 'docker://ghcr.io/kaspioffers/offerfetcher/api-service:latest'
-  args:
-    - ${{ inputs.database-connection-string }}
-    - ${{ inputs.timescaledb-connection-string }}
-    - ${{ inputs.batch-size }}
-    - ${{ inputs.scan-interval-minutes }}
-    - ${{ inputs.api-timeout }}
-    - ${{ inputs.proxy-url }}
-    - ${{ inputs.proxy-username }}
-    - ${{ inputs.proxy-password }}
+  using: 'composite'
+  steps:
+    - name: Log in to GitHub Container Registry
+      shell: bash
+      run: |
+        echo "${{ inputs.ghcr-token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    
+    - name: Pull Docker image
+      shell: bash
+      run: |
+        docker pull ghcr.io/kaspioffers/offerfetcher/api-service:latest
+    
+    - name: Run OfferFetcher
+      id: run-action
+      shell: bash
+      run: |
+        docker run --rm \
+          ghcr.io/kaspioffers/offerfetcher/api-service:latest \
+          "${{ inputs.database-connection-string }}" \
+          "${{ inputs.timescaledb-connection-string }}" \
+          "${{ inputs.batch-size }}" \
+          "${{ inputs.scan-interval-minutes }}" \
+          "${{ inputs.api-timeout }}" \
+          "${{ inputs.proxy-url }}" \
+          "${{ inputs.proxy-username }}" \
+          "${{ inputs.proxy-password }}"
+    
+    - name: Logout from GHCR
+      shell: bash
+      if: always()
+      run: docker logout ghcr.io
