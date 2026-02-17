@@ -76,7 +76,15 @@ runs:
           "${{ inputs.api-timeout }}" \
           "${{ inputs.proxy-url }}" \
           "${{ inputs.proxy-username }}" \
-          "${{ inputs.proxy-password }}"
+          "${{ inputs.proxy-password }}" \
+          2>&1 | tee offerfetcher.log
+          
+    - name: Upload logs
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: offerfetcher-logs
+        path: offerfetcher.log
     
     - name: Logout from GHCR
       shell: bash
