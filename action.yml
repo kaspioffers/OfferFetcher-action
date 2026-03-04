@@ -61,14 +61,14 @@ runs:
     - name: Pull Docker image
       shell: bash
       run: |
-        docker pull ghcr.io/kaspioffers/offerfetcher/api-service:latest
+        docker pull ghcr.io/kaspioffers/offerfetcher/worker:latest
     
-    - name: Run OfferFetcher
+    - name: Run OfferFetcher Worker
       id: run-action
       shell: bash
       run: |
         docker run --rm \
-          ghcr.io/kaspioffers/offerfetcher/api-service:latest \
+          ghcr.io/kaspioffers/offerfetcher/worket:latest \
           "${{ inputs.database-connection-string }}" \
           "${{ inputs.timescaledb-connection-string }}" \
           "${{ inputs.batch-size }}" \
