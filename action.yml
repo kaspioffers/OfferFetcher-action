@@ -68,7 +68,7 @@ runs:
       shell: bash
       run: |
         docker run --rm \
-          ghcr.io/kaspioffers/offerfetcher/worket:latest \
+          ghcr.io/kaspioffers/offerfetcher/worker:latest \
           "${{ inputs.database-connection-string }}" \
           "${{ inputs.timescaledb-connection-string }}" \
           "${{ inputs.batch-size }}" \
