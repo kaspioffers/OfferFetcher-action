@@ -13,10 +13,6 @@ inputs:
   database-connection-string:
     description: 'PostgreSQL database connection string for OfferFetcher'
     required: true
-  timescaledb-connection-string:
-    description: 'TimescaleDB connection string for time-series data'
-    required: false
-    default: ''
   batch-size:
     description: 'Number of offers to fetch per batch'
     required: false
@@ -70,7 +66,6 @@ runs:
         docker run --rm \
           ghcr.io/kaspioffers/offerfetcher/worker:latest \
           "${{ inputs.database-connection-string }}" \
-          "${{ inputs.timescaledb-connection-string }}" \
           "${{ inputs.batch-size }}" \
           "${{ inputs.scan-interval-minutes }}" \
           "${{ inputs.api-timeout }}" \
