@@ -12,6 +12,7 @@ Fetch offers as part of your GitHub Actions workflows.
 |-------|-------------|----------|---------|
 | `ghcr-token` | GitHub PAT with `read:packages` permission | ✅ Yes | - |
 | `database-connection-string` | PostgreSQL connection string | ✅ Yes | - |
+| `timescaledb-connection-string` | TimescaleDB connection string | ⚠️ No | - |
 | `batch-size` | Number of offers per batch | ⚠️ No | `100` |
 | `scan-interval-minutes` | Minutes between scans | ⚠️ No | `15` |
 | `api-timeout` | Maximum runtime in seconds | ⚠️ No | `300` |
